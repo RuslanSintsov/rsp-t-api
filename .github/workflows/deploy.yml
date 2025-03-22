@@ -1,4 +1,4 @@
-name: Deploy FastAPI to GitHub Pages
+name: Deploy to Render
 
 on:
   push:
@@ -11,32 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Deploy to Render
+        uses: render-actions/deploy@v1
         with:
-          python-version: '3.13'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install uvicorn httpx
-
-      - name: Create env file
-        run: |
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
-          echo "GITHUB_CLIENT_ID=${{ secrets.GITHUB_CLIENT_ID }}" >> .env
-          echo "GITHUB_CLIENT_SECRET=${{ secrets.GITHUB_CLIENT_SECRET }}" >> .env
-          echo "GITHUB_REDIRECT_URI=${{ secrets.GITHUB_REDIRECT_URI }}" >> .env
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-
-      - name: Create static files
-        run: |
-          mkdir -p static
-          echo "API is deployed at https://ruslansintsov.github.io/rsp-t-api" > static/index.html
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./static 
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.RENDER_API_KEY }} 

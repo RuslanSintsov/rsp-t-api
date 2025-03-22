@@ -4,3 +4,5 @@ python-dotenv
 PyJWT
 asgiref
 gunicorn
+passlib[bcrypt]
+python-multipart
